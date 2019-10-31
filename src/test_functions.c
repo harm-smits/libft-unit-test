@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/20 07:31:55 by juligonz         ###   ########.fr       */
+/*   Updated: 2019/10/31 13:49:25 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1791,7 +1791,7 @@ void			test_ft_calloc_basic(void *ptr) {
 			void * d1 = ft_calloc(size, sizeof(int));
             MALLOC_RESET;
 			void * d2 = calloc(size, sizeof(int));
-			if (memcmp(d1, d2, size * sizeof(int)))
+			if (!memcmp(d1, d2, size * sizeof(int)))
 				exit(TEST_FAILED);
 			free(d1);
 			free(d2);
@@ -4613,38 +4613,6 @@ void			test_ft_atoi_min_long(void *ptr) {
 			);
 }
 
-void			test_ft_atoi_over_max_long(void *ptr) {
-	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLANATION("your atoi does not work with over long max value");
-
-	SANDBOX_RAISE(
-			char	n[40] = "99999999999999999999999999";
-
-			int		i1 = atoi(n);
-			int		i2 = ft_atoi(n);
-			if (i1 == i2)
-				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i1, i2);
-			exit(TEST_KO);
-			);
-}
-
-void			test_ft_atoi_over_min_long(void *ptr) {
-	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLANATION("your atoi does not work with over long min value");
-
-	SANDBOX_RAISE(
-			char	n[40] = "-99999999999999999999999999";
-
-			int		i1 = atoi(n);
-			int		i2 = ft_atoi(n);
-			if (i1 == i2)
-				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i1, i2);
-			exit(TEST_KO);
-			);
-}
-
 void			test_ft_atoi_null(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 
@@ -4684,8 +4652,6 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_min_int);
 	add_fun_subtest(test_ft_atoi_max_long);
 	add_fun_subtest(test_ft_atoi_min_long);
-	add_fun_subtest(test_ft_atoi_over_max_long);
-	add_fun_subtest(test_ft_atoi_over_min_long);
 	add_fun_subtest(test_ft_atoi_null);
 	add_fun_subtest(test_ft_atoi_speed);
 }
@@ -6499,29 +6465,6 @@ void			test_ft_split_malloc_null(void *ptr) {
 			);
 }
 
-void			test_ft_split_zero(void *ptr) {
-	char	**(*ft_split)(char *, char) = ptr;
-	SET_EXPLANATION("your split does not work with basic input");
-	char	**expected = (char*[6]){"split", "this", "for", "me", "!", NULL};
-
-	SANDBOX_RAISE(
-			char	*s = "      split       this for   me  !       ";
-
-			MALLOC_MEMSET;
-			char	**result = ft_split(s, ' ');
-			MALLOC_RESET;
-			while (*result) {
-				if (strcmp(*result, *expected)) {
-					SET_DIFF(*expected, *result);
-					exit(TEST_FAILED);
-				}
-				result++;
-				expected++;
-			}
-			exit(TEST_SUCCESS);
-			);
-}
-
 void			test_ft_split_null(void *ptr) {
 	char	**(*ft_split)(char *, char) = ptr;
 	SET_EXPLANATION("your split does not segfault/return null when null parameter is sent");
@@ -6544,7 +6487,6 @@ void            test_ft_split(void) {
 	add_fun_subtest(test_ft_split_full);
 	add_fun_subtest(test_ft_split_free);
 	add_fun_subtest(test_ft_split_malloc_null);
-	add_fun_subtest(test_ft_split_zero);
 	add_fun_subtest(test_ft_split_null);
 }
 
@@ -6770,32 +6712,9 @@ void			test_ft_putchar_ascii(void *ptr) {
 			);
 }
 
-void			test_ft_putchar_unicode(void *ptr) {
-	typeof(putchar)	*ft_putchar = ptr;
-	SET_EXPLANATION("your putchar does not work with unicode");
-
-	SANDBOX_RAISE(
-			char	buff[10];
-			char	buff2[10];
-			int		c = L'ø';
-			int		len = 0;
-			putwchart(c, &len, buff2);
-			buff2[len] = 0;
-			STDOUT_TO_BUFF;
-			ft_putchar(c);
-			GET_STDOUT(buff, 10);
-			if (!strcmp(buff, buff2))
-				exit(TEST_SUCCESS);
-			SET_DIFF(buff, buff2);
-			exit(TEST_KO);
-			);
-	(void)ft_putchar;
-}
-
 void            test_ft_putchar(void){
 	add_fun_subtest(test_ft_putchar_basic);
 	add_fun_subtest(test_ft_putchar_ascii);
-	add_fun_subtest(test_ft_putchar_unicode);
 }
 
 ////////////////////////////////
@@ -7133,32 +7052,9 @@ void			test_ft_putchar_fd_ascii(void *ptr) {
 			);
 }
 
-void			test_ft_putchar_fd_unicode(void *ptr) {
-	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLANATION("your putchar_fd does not work with unicode");
-
-	SANDBOX_RAISE(
-			char	buff[10];
-			char	buff2[10];
-			int		c = L'ø';
-			int		len = 0;
-			putwchart(c, &len, buff2);
-			buff2[len] = 0;
-			STDERR_TO_BUFF;
-			ft_putchar_fd(c, STDERR_FILENO);
-			GET_STDERR(buff, 10);
-			if (!strcmp(buff, buff2))
-				exit(TEST_SUCCESS);
-			SET_DIFF(buff, buff2);
-			exit(TEST_KO);
-			);
-	(void)ft_putchar_fd;
-}
-
 void            test_ft_putchar_fd(void){
 	add_fun_subtest(test_ft_putchar_fd_basic);
 	add_fun_subtest(test_ft_putchar_fd_ascii);
-	add_fun_subtest(test_ft_putchar_fd_unicode);
 }
 
 ////////////////////////////////
@@ -7569,7 +7465,7 @@ void			test_ft_lstdelone_basic(void *ptr) {
 
 			ft_lstdelone(l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			if (!l)
+			if (!l->content)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
