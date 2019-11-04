@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/31 13:49:25 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/04 08:44:39 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1791,7 +1791,7 @@ void			test_ft_calloc_basic(void *ptr) {
 			void * d1 = ft_calloc(size, sizeof(int));
             MALLOC_RESET;
 			void * d2 = calloc(size, sizeof(int));
-			if (!memcmp(d1, d2, size * sizeof(int)))
+			if (memcmp(d1, d2, size * sizeof(int)) != 0)
 				exit(TEST_FAILED);
 			free(d1);
 			free(d2);
