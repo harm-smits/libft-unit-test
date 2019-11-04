@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/04 08:44:39 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/04 17:04:10 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6465,6 +6465,28 @@ void			test_ft_split_malloc_null(void *ptr) {
 			);
 }
 
+void			test_ft_split_zero(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
+	char	**expected = (char*[6]){"split", "this", "for", "me", "!", NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "      split       this for   me  !       ";
+
+			MALLOC_MEMSET;
+			char	**result = ft_split(s, ' ');
+			MALLOC_RESET;
+			size_t	iteration = 0;
+			while (result[iteration]) {
+				if (strcmp(result[iteration], expected[iteration])) {
+					exit(TEST_FAILED);
+				}
+				iteration++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_split_null(void *ptr) {
 	char	**(*ft_split)(char *, char) = ptr;
 	SET_EXPLANATION("your split does not segfault/return null when null parameter is sent");
@@ -6487,6 +6509,7 @@ void            test_ft_split(void) {
 	add_fun_subtest(test_ft_split_full);
 	add_fun_subtest(test_ft_split_free);
 	add_fun_subtest(test_ft_split_malloc_null);
+	add_fun_subtest(test_ft_split_zero);
 	add_fun_subtest(test_ft_split_null);
 }
 
@@ -7442,7 +7465,7 @@ void			test_ft_lstnew(void){
 ////////////////////////////////
 
 void			lstdelone_f(void *d) {
-	free(d);
+	*((char *)d) = '\0';
 }
 
 t_list			*lstnew(void *d) {
@@ -7465,7 +7488,7 @@ void			test_ft_lstdelone_basic(void *ptr) {
 
 			ft_lstdelone(l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			if (!l->content)
+			if (*((char *)l->content) == '\0')
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
