@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/05 16:56:37 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/06 11:29:35 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7465,7 +7465,8 @@ void			test_ft_lstnew(void){
 ////////////////////////////////
 
 void			lstdelone_f(void *d) {
-	*((char *)d) = '\0';
+	free(d);
+	d = NULL;
 }
 
 t_list			*lstnew(void *d) {
@@ -7478,6 +7479,19 @@ t_list			*lstnew(void *d) {
 	return (ret);
 }
 
+void			test_ft_lstdelone_null(void *ptr) {
+	void		(*ft_lstdelone)(t_list *, void (*)(void *)) = ptr;
+	SET_EXPLANATION("your lstdelone does not work");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			ft_lstdelone(NULL, lstdelone_f);
+			write(STDERR_FILENO, "", 1);
+			exit(TEST_SUCCESS);
+			);
+	VOID_STDERR;
+}
+
 void			test_ft_lstdelone_basic(void *ptr) {
 	void		(*ft_lstdelone)(t_list *, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstdelone does not work");
@@ -7485,18 +7499,20 @@ void			test_ft_lstdelone_basic(void *ptr) {
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("test"));
+			void	*content = l->content;
 
 			ft_lstdelone(l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			if (l->content) == NULL && l->next == NULL)
+			if (content == l->content)
 				exit(TEST_SUCCESS);
-			SET_DIFF_PTR(NULL, l);
+			SET_DIFF_PTR(content, l->content);
 			exit(TEST_FAILED);
 			);
 	VOID_STDERR;
 }
 
 void			test_ft_lstdelone(void) {
+	add_fun_subtest(test_ft_lstdelone_null);
 	add_fun_subtest(test_ft_lstdelone_basic);
 }
 
