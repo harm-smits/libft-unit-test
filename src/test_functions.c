@@ -6,12 +6,13 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/06 11:29:35 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/07 12:40:25 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_test.h"
 #include <sys/mman.h>
+#include <string.h>
 
 #define		STRING_1	"the cake is a lie !\0I'm hidden lol\r\n"
 #define		STRING_4	"phrase differente pour le test"
@@ -5985,6 +5986,24 @@ void			test_ft_substr_null(void *ptr) {
 			);
 }
 
+void			test_ft_substr_longer_than_usual(void *ptr)
+{
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your subst does not work when the size is longer in a null byte split string");
+	SANDBOX_RAISE(
+			char	*str = "1234\00056789";
+			char	*res;
+
+			res = ft_substr(str, 3, 10);
+			if (strlen(res) != 1) {
+				SET_DIFF_INT((int)strlen(str), 1);
+				free(res);
+				exit(TEST_FAILED);
+			}
+			exit (TEST_SUCCESS);
+			);
+}
+
 void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_basic);
 	add_fun_subtest(test_ft_substr_basic2);
@@ -5994,6 +6013,7 @@ void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_malloc_null);
 	add_fun_subtest(test_ft_substr_all);
 	add_fun_subtest(test_ft_substr_electric_memory);
+	add_fun_subtest(test_ft_substr_longer_than_usual);
 	add_fun_subtest(test_ft_substr_null);
 }
 
