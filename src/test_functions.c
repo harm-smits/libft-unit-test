@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/07 12:40:25 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/07 13:04:55 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -5991,12 +5991,12 @@ void			test_ft_substr_longer_than_usual(void *ptr)
 	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("your subst does not work when the size is longer in a null byte split string");
 	SANDBOX_RAISE(
-			char	*str = "1234\00056789";
+			char	str[] = "12345\0idd9934";
 			char	*res;
 
 			res = ft_substr(str, 3, 10);
-			if (strlen(res) != 1) {
-				SET_DIFF_INT((int)strlen(str), 1);
+			if (strlen(res) != 2) {
+				SET_DIFF_INT(2, (int)strlen(res));
 				free(res);
 				exit(TEST_FAILED);
 			}
