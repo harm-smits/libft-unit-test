@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/07 13:14:52 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/07 13:18:58 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6013,7 +6013,7 @@ void			test_ft_substr_longer_than_total_length(void *ptr)
 
 	SANDBOX_PROT(
 		res = ft_substr(str, 3, 10);
-		if (str[4])
+		if (res[4])
 			exit(TEST_FAILED);
 	);
 }
