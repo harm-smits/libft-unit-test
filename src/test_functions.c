@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/07 13:04:55 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/07 13:14:52 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6004,6 +6004,20 @@ void			test_ft_substr_longer_than_usual(void *ptr)
 			);
 }
 
+void			test_ft_substr_longer_than_total_length(void *ptr)
+{
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your subst does not work when the size is longer in a null byte split string");
+	char	str[] = "12345\0idd9934";
+	char	*res;
+
+	SANDBOX_PROT(
+		res = ft_substr(str, 3, 10);
+		if (str[4])
+			exit(TEST_FAILED);
+	);
+}
+
 void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_basic);
 	add_fun_subtest(test_ft_substr_basic2);
@@ -6014,6 +6028,7 @@ void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_all);
 	add_fun_subtest(test_ft_substr_electric_memory);
 	add_fun_subtest(test_ft_substr_longer_than_usual);
+	add_fun_subtest(test_ft_substr_longer_than_total_length);
 	add_fun_subtest(test_ft_substr_null);
 }
 
