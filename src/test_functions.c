@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/07 13:18:58 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/08 10:24:01 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1341,24 +1341,26 @@ void			test_ft_memcmp_electric_memory(void *ptr) {
 
 void			test_ft_memcmp_null1(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp does not segfault when null parameter is sent");
+	SET_EXPLANATION("your memcmp segfaults when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			char	b1[] = "nyancat";
 
 			ft_memcmp(NULL, b1, 4);
-			);
+			exit (TEST_SUCCESS);
+	);
 }
 
 void			test_ft_memcmp_null2(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp does not segfault when null parameter is sent");
+	SET_EXPLANATION("your memcmp segfaults when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			char	b1[] = "nyancat";
 
 			ft_memcmp(b1, NULL, 4);
-			);
+			exit(TEST_SUCCESS);
+	);
 }
 
 void			test_ft_memcmp_speed(void *ptr) {
