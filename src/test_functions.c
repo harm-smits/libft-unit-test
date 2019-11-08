@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/08 10:24:01 by hsmits        ########   odam.nl         */
+/*   Updated: 2019/11/08 10:59:00 by hsmits        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1341,25 +1341,23 @@ void			test_ft_memcmp_electric_memory(void *ptr) {
 
 void			test_ft_memcmp_null1(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp segfaults when null parameter is sent");
+	SET_EXPLANATION("your memcmp no segfault when null parameter is sent");
 
-	SANDBOX_RAISE(
+	SANDBOX_IRAISE(
 			char	b1[] = "nyancat";
 
 			ft_memcmp(NULL, b1, 4);
-			exit (TEST_SUCCESS);
 	);
 }
 
 void			test_ft_memcmp_null2(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp segfaults when null parameter is sent");
+	SET_EXPLANATION("your memcmp no segfault when null parameter is sent");
 
-	SANDBOX_RAISE(
+	SANDBOX_IRAISE(
 			char	b1[] = "nyancat";
 
 			ft_memcmp(b1, NULL, 4);
-			exit(TEST_SUCCESS);
 	);
 }
 
@@ -6588,7 +6586,7 @@ void			test_ft_itoa_random(void *ptr) {
 			int		n;
 			char	*d;
 
-			for (int i = 0; i < 2000; i++) {
+			for (int i = 0; i < 200000; i++) {
 				n = rand();
 				d = ft_itoa(n);
 				if (atoi(d) != n) {
